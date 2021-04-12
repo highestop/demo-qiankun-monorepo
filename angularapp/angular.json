@@ -1,0 +1,168 @@
+{
+  "$schema": "../node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "angularapp1": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "less"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "angularapp",
+      "sourceRoot": "app1/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "outputPath": "dist/app1",
+            "index": "app1/src/index.html",
+            "main": "app1/src/main.ts",
+            "tsConfig": "tsconfig.app1.json",
+            "customWebpackConfig": {
+              "path": "extra-webpack.config.js"
+            },
+            "aot": true,
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "../node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
+            ],
+            "styles": ["app1/src/styles.less"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "app1/src/environments/environment.ts",
+                  "with": "app1/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "none",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "options": {
+            "browserTarget": "angularapp1:build",
+            "disableHostCheck": true,
+            "port": 3020
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "angularapp1:build:production"
+            }
+          }
+        }
+      }
+    },
+    "angularapp2": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "less"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "angularapp",
+      "sourceRoot": "app2/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "outputPath": "dist/app2",
+            "index": "app2/src/index.html",
+            "main": "app2/src/main.ts",
+            "tsConfig": "tsconfig.app2.json",
+            "customWebpackConfig": {
+              "path": "extra-webpack.config.js"
+            },
+            "aot": true,
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "../node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
+            ],
+            "styles": ["app2/src/styles.less"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "app2/src/environments/environment.ts",
+                  "with": "app2/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "none",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "options": {
+            "browserTarget": "angularapp2:build",
+            "disableHostCheck": true,
+            "port": 3021
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "angularapp2:build:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "angularapp1"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "demo-qiankun-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "container",
+    "reactapp1",
+    "reactapp2",
+    "angularapp"
+  ],
+  "scripts": {
+    "dev-c": "yarn workspace container run start",
+    "build-c": "yarn workspace container run build",
+    "dev-r1": "yarn workspace reactapp1 run start",
+    "build-r1": "yarn workspace reactapp1 run build",
+    "dev-r2": "yarn workspace reactapp2 run start",
+    "build-r2": "yarn workspace reactapp2 run build",
+    "dev-a1": "yarn workspace angularapp run start angularapp1",
+    "build-a1": "yarn workspace angularapp run build angularapp1",
+    "dev-a2": "yarn workspace angularapp run start angularapp2",
+    "build-a2": "yarn workspace angularapp run build angularapp2",
+    "dev": "yarn dev-c & yarn dev-r1 & yarn dev-r2 & yarn dev-a1 & yarn dev-a2"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "singleQuote": true
+  }
+}
