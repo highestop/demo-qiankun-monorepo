@@ -1,3 +1,4 @@
+import './public-path';
 import { enableProdMode, NgModuleRef } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
@@ -14,6 +15,7 @@ async function render() {
     .bootstrapModule(AppModule)
     .catch(err => console.error(err));
 }
+
 if (!(window as any).__POWERED_BY_QIANKUN__) {
   render();
 }
@@ -30,7 +32,7 @@ export async function mount(props: any) {
 export async function unmount(props: any) {
   console.log('[angularapp1] unmount with props', props);
   // @ts-ignore
-  app.destroy();
+  app?.destroy();
 }
 
 export async function update(props: any) {

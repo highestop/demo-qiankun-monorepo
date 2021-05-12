@@ -69,9 +69,11 @@ const Routes = () => {
 // 进入 container 匹配到这个组件，从而手动挂载子应用
 // 然后切换到 sublib hash，命中子应用中的路由
 const Page = () => {
-  const loadapp1 = useRef<MicroApp>();
-  const loadapp2 = useRef<MicroApp>();
-  const loadApp = useCallback((location: 1 | 2) => {
+  const loadapp1 = useRef<MicroApp | null>(null);
+  const loadapp2 = useRef<MicroApp | null>(null);
+  const loadapp3 = useRef<MicroApp | null>(null);
+  const loadapp4 = useRef<MicroApp | null>(null);
+  const loadApp = useCallback((location: 1 | 2 | 3 | 4) => {
     switch (location) {
       case 1: {
         loadapp1.current = loadMicroApp({
@@ -90,7 +92,28 @@ const Page = () => {
           name: 'reactapp2',
           entry: '//localhost:3011/',
           container: '#loadapp2',
-          // 初始化参数，会在 mount 钩子里打印
+          props: {
+            source: 'load from page',
+          },
+        });
+        return;
+      }
+      case 3: {
+        loadapp3.current = loadMicroApp({
+          name: 'angularapp1',
+          entry: '//localhost:3020/',
+          container: '#loadapp3',
+          props: {
+            source: 'load from page',
+          },
+        });
+        return;
+      }
+      case 4: {
+        loadapp4.current = loadMicroApp({
+          name: 'angularapp2',
+          entry: '//localhost:3021/',
+          container: '#loadapp4',
           props: {
             source: 'load from page',
           },
@@ -99,40 +122,72 @@ const Page = () => {
       }
     }
   }, []);
-  const unloadApp = useCallback((location: 1 | 2) => {
+  const unloadApp = useCallback((location: 1 | 2 | 3 | 4) => {
     switch (location) {
       case 1: {
         // https://single-spa.js.org/error/?code=6&arg=&arg=LOADING_SOURCE_CODE
         console.log(loadapp1.current?.getStatus());
         if (loadapp1.current?.getStatus() === 'MOUNTED') {
-          loadapp1.current.unmount();
+          // 卸载之后要重置这个 state，否则实例还在，下游调用 update 等方法时 single-spa 会报错
+          loadapp1.current.unmount().then(() => (loadapp1.current = null));
         }
         return;
       }
       case 2: {
         console.log(loadapp2.current?.getStatus());
         if (loadapp2.current?.getStatus() === 'MOUNTED') {
-          loadapp2.current.unmount();
+          loadapp2.current.unmount().then(() => (loadapp2.current = null));
+        }
+        return;
+      }
+      case 3: {
+        console.log(loadapp3.current?.getStatus());
+        if (loadapp3.current?.getStatus() === 'MOUNTED') {
+          loadapp3.current.unmount().then(() => (loadapp3.current = null));
+        }
+        return;
+      }
+      case 4: {
+        console.log(loadapp4.current?.getStatus());
+        if (loadapp4.current?.getStatus() === 'MOUNTED') {
+          loadapp4.current.unmount().then(() => (loadapp4.current = null));
         }
         return;
       }
     }
   }, []);
   const update = useCallback(() => {
-    loadapp1.current?.update && loadapp1.current?.update({ ts: Date.now() });
-    loadapp2.current?.update && loadapp2.current?.update({ ts: Date.now() });
+    console.log(loadapp1?.current?.update);
+    if (loadapp1?.current?.update) {
+      loadapp1?.current?.update({ ts: Date.now() });
+    }
+    if (loadapp2?.current?.update) {
+      loadapp2?.current?.update({ ts: Date.now() });
+    }
+    if (loadapp3?.current?.update) {
+      loadapp3?.current?.update({ ts: Date.now() });
+    }
+    if (loadapp4?.current?.update) {
+      loadapp4?.current?.update({ ts: Date.now() });
+    }
   }, []);
   return (
     <Card title="Page">
-      <Button onClick={() => loadApp(1)}>Load 1</Button>
-      <Button onClick={() => unloadApp(1)}>Unload 1</Button>
-      <Button onClick={() => loadApp(2)}>Load 2</Button>
-      <Button onClick={() => unloadApp(2)}>Unload 2</Button>
+      <Button onClick={() => loadApp(1)}>+ React1</Button>
+      <Button onClick={() => unloadApp(1)}>- React1</Button>
+      <Button onClick={() => loadApp(2)}>+ React2</Button>
+      <Button onClick={() => unloadApp(2)}>- React2</Button>
+      <Button onClick={() => loadApp(3)}>+ Angular1</Button>
+      <Button onClick={() => unloadApp(3)}>- Angular1</Button>
+      <Button onClick={() => loadApp(4)}>+ Angular2</Button>
+      <Button onClick={() => unloadApp(4)}>- Angular2</Button>
       {/* 点击按钮，触发子应用的 update 钩子，在子应用中打印结果 */}
       <Button onClick={update}>Update</Button>
       {/* 手动挂载子应用的入口，不在最外层 */}
       <div id="loadapp1"></div>
       <div id="loadapp2"></div>
+      <div id="loadapp3"></div>
+      <div id="loadapp4"></div>
     </Card>
   );
 };
@@ -195,17 +250,28 @@ registerMicroApps(
   // 各种钩子打印
   {
     beforeLoad: app => Promise.resolve(console.log('before load', app.name)),
-    beforeMount: app => Promise.resolve(console.log('before mount', app.name)),
-    afterMount: app => Promise.resolve(console.log('after mount', app.name)),
+    beforeMount: app =>
+      Promise.resolve(
+        console.log('before mount', app.name, window.location.toString())
+      ),
+    afterMount: app =>
+      Promise.resolve(
+        console.log('after mount', app.name, window.location.toString())
+      ),
     beforeUnmount: app =>
-      Promise.resolve(console.log('before unmount', app.name)),
+      Promise.resolve(
+        console.log('before unmount', app.name, window.location.toString())
+      ),
     afterUnmount: app =>
-      Promise.resolve(console.log('after unmount', app.name)),
+      Promise.resolve(
+        console.log('after unmount', app.name, window.location.toString())
+      ),
   }
 );
 
 start({
   prefetch: false, // 预加载
-  sandbox: { strictStyleIsolation: true }, // 沙箱隔离，开启强隔离保证相同类名也不会相互覆盖
+  // 避免 Angular 子应用因沙箱问题索引不到 app-root 节点加载失败
+  // sandbox: { strictStyleIsolation: true }, // 沙箱隔离，开启强隔离保证相同类名也不会相互覆盖
   singular: false, // 允许多例子应用
 });

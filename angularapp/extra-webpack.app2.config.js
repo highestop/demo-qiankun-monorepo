@@ -12,9 +12,9 @@ module.exports = {
     injectClient: false,
   },
   output: {
-    library: `${packageName}`,
+    library: `${packageName}2`,
     libraryTarget: 'umd',
-    jsonpFunction: `webpackJsonp_${packageName}`,
+    jsonpFunction: `webpackJsonp_${packageName}2`,
     globalObject: 'window',
   },
 };

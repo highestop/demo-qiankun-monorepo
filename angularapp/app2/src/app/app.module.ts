@@ -43,15 +43,15 @@ registerLocaleData(zh);
     NzSpaceModule,
   ],
   bootstrap: [AppComponent],
-  providers: [
-    {
-      provide: APP_BASE_HREF,
-      // @ts-ignore
-      useValue: window.__POWERED_BY_QIANKUN__
-        ? // @ts-ignore
-          window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__
-        : '/',
-    },
-  ],
+  // providers: [
+  //   {
+  //     provide: APP_BASE_HREF,
+  //     // @ts-ignore
+  //     useValue: window.__POWERED_BY_QIANKUN__
+  //       ? // @ts-ignore
+  //         window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__
+  //       : '/',
+  //   },
+  // ],
 })
 export class AppModule {}

@@ -18,10 +18,5 @@
     "typeRoots": ["node_modules/@types"],
     "module": "es2020",
     "lib": ["es2018", "dom"]
-  },
-  "angularCompilerOptions": {
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
   }
 }

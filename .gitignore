@@ -1,12 +1,11 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/out-tsc
+dist
+out-tsc
 
 # dependencies
-/node_modules
-*/node_modules
+node_modules
 
 # registry
 .npmrc
@@ -17,11 +16,11 @@ package-lock.json
 yarn.lock
 
 # editors
-/.idea
+.idea
 *.launch
 
 # types
-/typings
+typings
 
 # logs
 npm-debug.log
@@ -30,4 +29,3 @@ yarn-error.log
 # system
 .DS_Store
 Thumbs.db
-```
